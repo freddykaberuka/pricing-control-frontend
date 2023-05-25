@@ -4,7 +4,7 @@ import Team from "./scenes/team";
 import { useState } from "react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
 import Dashboard from "./scenes/dashboard";
 import Contacts from "./scenes/contacts";
@@ -18,8 +18,9 @@ import Pie from "./scenes/Pie";
 import Line from "./scenes/line";
 import Geography from "./scenes/geography";
 import Main from "./scenes/main";
-
-
+import SignIn from './scenes/user/signin';
+import Home from './scenes/home'
+import './index.css'
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -30,9 +31,9 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="app">
-          <Topbar setIsSidebar={setIsSidebar} />
+          {/* {isSignInPath() ? null : <Topbar setIsSidebar={setIsSidebar} />} */}
           <main className="content" style={{ display: "flex" }}>
-            {isSidebar && <Sidebar isSidebar={isSidebar} />}
+            {isSidebar && !isSignInPath() && <Sidebar isSidebar={isSidebar} />}
             <Box flexGrow={1}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
@@ -46,6 +47,9 @@ function App() {
                 <Route path="pie" element={<Pie />} />
                 <Route path="/line" element={<Line />} />
                 <Route path="/geography" element={<Geography />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/*" element={<Navigate to="/signin" />} />
               </Routes>
             </Box>
           </main>
@@ -55,5 +59,9 @@ function App() {
   );
 }
 
+function isSignInPath() {
+  const currentPath = window.location.pathname;
+  return currentPath === "/signin";
+}
 
 export default App;

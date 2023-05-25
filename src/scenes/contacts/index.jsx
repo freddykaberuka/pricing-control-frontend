@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
@@ -15,9 +15,10 @@ const Contacts = () => {
   return (
     <Box m="20px">
       <Header
-        title="CONTACTS"
-        subtitle="List of Contacts for Future Reference"
+        title="Commodity Info"
+        subtitle="List of Commodities"
       />
+      
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -50,6 +51,11 @@ const Contacts = () => {
           },
         }}
       >
+        <Box display="flex" justifyContent="end" mt="20px">
+              <Button type="submit" color="secondary" variant="contained">
+                Add New Commodity
+              </Button>
+            </Box>
         <DataGrid
           rows={mockDataContacts}
           columns={columns}

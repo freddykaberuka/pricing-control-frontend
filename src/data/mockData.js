@@ -3,72 +3,72 @@ import { tokens } from "../theme";
 export const mockDataTeam = [
   {
     id: 1,
-    name: "Jon Snow",
-    email: "jonsnow@gmail.com",
+    name: "Paccy",
+    email: "paccy@gmail.com",
     age: 35,
     phone: "(665)121-5454",
     access: "admin",
   },
   {
     id: 2,
-    name: "Cersei Lannister",
-    email: "cerseilannister@gmail.com",
+    name: "Mutoni",
+    email: "mutoni@gmail.com",
     age: 42,
     phone: "(421)314-2288",
     access: "manager",
   },
   {
     id: 3,
-    name: "Jaime Lannister",
-    email: "jaimelannister@gmail.com",
+    name: "Mutoni Pascaline",
+    email: "Pascaline@gmail.com",
     age: 45,
     phone: "(422)982-6739",
     access: "user",
   },
   {
     id: 4,
-    name: "Anya Stark",
-    email: "anyastark@gmail.com",
+    name: "Ange",
+    email: "ange@gmail.com",
     age: 16,
     phone: "(921)425-6742",
     access: "admin",
   },
   {
     id: 5,
-    name: "Daenerys Targaryen",
-    email: "daenerystargaryen@gmail.com",
+    name: "Mutoni Paccy",
+    email: "mutp@gmail.com",
     age: 31,
     phone: "(421)445-1189",
     access: "user",
   },
   {
     id: 6,
-    name: "Ever Melisandre",
-    email: "evermelisandre@gmail.com",
+    name: "Murerwa",
+    email: "Murerwa@gmail.com",
     age: 150,
     phone: "(232)545-6483",
     access: "manager",
   },
   {
     id: 7,
-    name: "Ferrara Clifford",
-    email: "ferraraclifford@gmail.com",
+    name: "Paccy",
+    email: "paccy@gmail.com",
     age: 44,
     phone: "(543)124-0123",
     access: "user",
   },
   {
     id: 8,
-    name: "Rossini Frances",
-    email: "rossinifrances@gmail.com",
+    name: "mutoni",
+    email: "mutoni@gmail.com",
     age: 36,
     phone: "(222)444-5555",
     access: "user",
   },
   {
     id: 9,
-    name: "Harvey Roxie",
-    email: "harveyroxie@gmail.com",
+    name: "paccy Roxie",
+    email: "paccyroxie@gmail.com",
     age: 65,
     phone: "(444)555-6239",
     access: "admin",
@@ -121,38 +121,7 @@ export const mockDataTeam = [
     phone: "(444)888-9245",
     access: "user"
   },
-  {
-    id: 16,
-    name: "Lucy Parker",
-    email: "lucyparker@yahoo.com",
-    age: 31,
-    phone: "(555)999-1672",
-    access: "user"
-  },
-  {
-    id: 17,
-    name: "Finn Anderson",
-    email: "finnanderson@hotmail.com",
-    age: 27,
-    phone: "(444)777-3019",
-    access: "user"
-  },
-  {
-    id: 18,
-    name: "Avery Wright",
-    email: "averywright@gmail.com",
-    age: 39,
-    phone: "(555)444-7463",
-    access: "user"
-  },
-  {
-    id: 19,
-    name: "Sofia Ramirez",
-    email: "sofiaramirez@yahoo.com",
-    age: 49,
-    phone: "(444)555-8921",
-    access: "user"
-  }
+
 ];
 
 export const mockDataContacts = [
