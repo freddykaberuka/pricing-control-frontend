@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import logo from '../assets/logo.png'
+import logo from '../assets/images.jpeg'
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,14 +31,14 @@ function Navbar() {
         </div>
       </div>
       <div
-        className={`absolute top-14 lg:relative lg:top-0 bg-white text-dark-green w-full font-bold flex-col items-center space-y-3 border-b-2 pb-4 border-b-gray-200 lg:pb-0 lg:space-y-0 lg:border-b-0 lg:flex lg:flex-row lg:space-x-8 lg:w-auto ${
+        className={`absolute top-14 lg:relative lg:top-0 bg-white-500 text-dark-green w-full font-bold flex-col items-center space-y-3 border-b-2 pb-4 border-b-gray-200 lg:pb-0 lg:space-y-0 lg:border-b-0 lg:flex lg:flex-row lg:space-x-8 lg:w-auto ${
           isOpen ? "flex" : "hidden"
         }`}
       >
         <a href="/">Home</a>
         <a href="">Contact Us</a>
         <Link to="/signin">
-        <div className="bg-gray-200 px-5 py-2 text-xs rounded">LOGIN</div></Link>
+        <div className="bg-gray-500 px-5 py-2 text-xs rounded">LOGIN</div></Link>
       </div>
     </nav>
   );

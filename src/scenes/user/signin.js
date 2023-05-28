@@ -17,7 +17,7 @@ function SignIn() {
               <div className="flex ml-10 mt-10">
                 {/* rome-ignore lint/a11y/useAltText: <explanation> */}
                 <img
-                  src="/assets/Logo.png"
+                  src="/assets/rwanda.svg"
                   className="w-24 h-24 md:w-20 md:h-20"
                 />
                 <h2 className="text-gray-400 font-semibold text-lg px-10 py-10 md:py-5">
@@ -30,7 +30,7 @@ function SignIn() {
 
               <div className="">
                 <h1 className="ml-5 mb-5 px-20 font-bold text-2xl text-bgprimary ">
-                  I no longer High Price on the market
+                  no longer High Price on the market
                 </h1>
                 <div className="flex justify-start">
                   <h1 className="px-24 py-5 font-semibold text-3xl text-bgyellow lg:font-medium md:text-2xl ">

@@ -19,21 +19,30 @@ import Line from "./scenes/line";
 import Geography from "./scenes/geography";
 import Main from "./scenes/main";
 import SignIn from './scenes/user/signin';
-import Home from './scenes/home'
-import './index.css'
+import Home from './scenes/home';
+import './index.css';
 
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
+
+  const isHomePath = () => {
+    return window.location.pathname === "/home";
+  };
+
+  const isSignInPath = () => {
+    return window.location.pathname === "/signin";
+  };
 
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="app">
-          {/* {isSignInPath() ? null : <Topbar setIsSidebar={setIsSidebar} />} */}
+          <div className='w-full'>
+          {!isSignInPath() && !isHomePath() && <Topbar setIsSidebar={setIsSidebar} />}
           <main className="content" style={{ display: "flex" }}>
-            {isSidebar && !isSignInPath() && <Sidebar isSidebar={isSidebar} />}
+            {!isSignInPath() && !isHomePath() && isSidebar && <Sidebar isSidebar={isSidebar} />}
             <Box flexGrow={1}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
@@ -44,7 +53,7 @@ function App() {
                 <Route path="/calendar" element={<Calendar />} />
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/bar" element={<Bar />} />
-                <Route path="pie" element={<Pie />} />
+                <Route path="/pie" element={<Pie />} />
                 <Route path="/line" element={<Line />} />
                 <Route path="/geography" element={<Geography />} />
                 <Route path="/signin" element={<SignIn />} />
@@ -54,14 +63,10 @@ function App() {
             </Box>
           </main>
         </div>
+        </div>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );
-}
-
-function isSignInPath() {
-  const currentPath = window.location.pathname;
-  return currentPath === "/signin";
 }
 
 export default App;

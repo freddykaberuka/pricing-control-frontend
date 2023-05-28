@@ -17,7 +17,7 @@ function Home() {
       <div className="flex flex-wrap lg:mt-24 mt-20 w-full">
         <div className="lg:w-1/2 flex flex-col lg:justify-normal justify-center items-center lg:items-start">
           <div>
-            <h2 className="text-black text-2xl font-bold text-center lg:text-left">
+            <h2 className="text-white-500 text-2xl font-bold text-center lg:text-left">
               Price Controller and Analytic system
             </h2>
             <div className="mt-1 text-center lg:text-left text-sm">
