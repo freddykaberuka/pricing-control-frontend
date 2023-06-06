@@ -1,11 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
+// import { useSelector, useDispatch } from 'react-redux';
+import { registerUser } from '../../store/authAction';
+
 
 function SignIn() {
   const [errortext, setErrortext] = useState("");
   const [loading, setLoading] = useState(false);
+  // const { userInfo, error, success } = useSelector(
+  //   (state) => state.user
+  // )
+  // const dispatch = useDispatch()
+
   return (
     <div className="flex h-full font-poppins">
       <div className="hidden sm:block w-1/2">
