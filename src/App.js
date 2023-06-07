@@ -21,6 +21,7 @@ import Main from "./scenes/main";
 import SignIn from './scenes/user/signin';
 import Home from './scenes/home';
 import './index.css';
+import SignUp from './scenes/user/register';
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -33,6 +34,9 @@ function App() {
   const isSignInPath = () => {
     return window.location.pathname === "/signin";
   };
+  const isSignUpPath = () =>{
+    return window.location.path === "/signup"
+  };
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -40,9 +44,9 @@ function App() {
         <CssBaseline />
         <div className="app">
           <div className='w-full'>
-          {!isSignInPath() && !isHomePath() && <Topbar setIsSidebar={setIsSidebar} />}
+          {!isSignInPath() && !isHomePath() && isSignUpPath() && <Topbar setIsSidebar={setIsSidebar} />}
           <main className="content" style={{ display: "flex" }}>
-            {!isSignInPath() && !isHomePath() && isSidebar && <Sidebar isSidebar={isSidebar} />}
+            {!isSignInPath() && !isHomePath() && isSignUpPath() && isSidebar && <Sidebar isSidebar={isSidebar} />}
             <Box flexGrow={1}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
@@ -58,7 +62,8 @@ function App() {
                 <Route path="/geography" element={<Geography />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/home" element={<Home />} />
-                <Route path="/*" element={<Navigate to="/signin" />} />
+                <Route path="/signin" element={<Navigate to="/signin" />} />
+                <Route path="/signup" element={<SignUp />} />
               </Routes>
             </Box>
           </main>

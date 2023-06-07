@@ -168,7 +168,9 @@ function SignIn() {
             <div className="text-bgprimary mt-6 text-sm font-medium">
               Do not have an account yet?{" "}
               <a className="text-bgyellow" href="">
+                <Link to="/signup">
                 Register here
+                </Link>
               </a>
             </div>
           </Form>
