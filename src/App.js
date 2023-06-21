@@ -49,7 +49,7 @@ function App() {
             {!isSignInPath() && !isHomePath() && isSignUpPath() && isSidebar && <Sidebar isSidebar={isSidebar} />}
             <Box flexGrow={1}>
               <Routes>
-                <Route path="/" element={<Dashboard />} />
+                <Route path="/" element={<SignIn />} />
                 <Route path="/team" element={<Team />} />
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/invoices" element={<Invoices />} />

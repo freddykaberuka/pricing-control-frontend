@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { Link } from "react-router-dom";
 // import { useSelector, useDispatch } from 'react-redux';
 import { registerUser } from '../../store/authAction';
+import axios from 'axios';
 
 
 function SignUp() {
@@ -68,7 +69,7 @@ function SignUp() {
           initialValues={{ email: "", password: "" }}
           validationSchema={Yup.object({
             email: Yup.string()
-              .email("Invalid email address")
+              .email("Invalid email address") 
               .required("Required"),
             password: Yup.string()
               .min(6, "Too Short!")
@@ -77,25 +78,37 @@ function SignUp() {
           })}
           onSubmit={(values, { setSubmitting }) => {
             setTimeout(async () => {
-              setLoading(true);
-              const resultAction = await dispatch(
-                login({
-                  email: values.email,
-                  password: values.password,
-                  device_id: window.location.hostname,
-                })
-              );
-              if (login.fulfilled.match(resultAction)) {
+              console.log(values,"llllll")
+              try {
+                setLoading(true);
+                const response = await axios.post('http://localhost:5000/user/signup', values);
+                console.log('User signup successful:', response);
                 setErrortext("");
                 setLoading(false);
                 setSubmitting(false);
-                navigate("/dashboard");
-              } else {
-                if (resultAction.payload) {
-                  setErrortext(resultAction.payload.message);
-                }
-                setErrortext(resultAction.payload.message);
+              } catch (error) {
+                setLoading(false);
+                setSubmitting(false);
+                console.error('Error signing up user:', error);
               }
+              // const resultAction = await dispatch(
+              //   login({
+              //     email: values.email,
+              //     password: values.password,
+              //     device_id: window.location.hostname,
+              //   })
+              // );
+              // if (login.fulfilled.match(resultAction)) {
+                // setErrortext("");
+                // setLoading(false);
+                // setSubmitting(false);
+              //   navigate("/dashboard");
+              // } else {
+              //   if (resultAction.payload) {
+              //     setErrortext(resultAction.payload.message);
+              //   }
+              //   setErrortext(resultAction.payload.message);
+              // }
               setLoading(false);
               setSubmitting(false);
             }, 400);
@@ -180,18 +193,7 @@ function SignUp() {
               className="flex items-center justify-center focus:shadow-outline mt-10 font-semibold bg-bgprimary text-white py-3 rounded text-sm"
             >
               {loading ? (
-                <Oval
-                  height={20}
-                  width={20}
-                  color="#fff"
-                  wrapperStyle={{}}
-                  wrapperClass=""
-                  visible={true}
-                  ariaLabel="oval-loading"
-                  secondaryColor="#fff"
-                  strokeWidth={5}
-                  strokeWidthSecondary={5}
-                />
+               <p>Loading ...</p>
               ) : (
                 "Sign Up"
               )}
