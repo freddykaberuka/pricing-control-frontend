@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { Link } from "react-router-dom";
 // import { useSelector, useDispatch } from 'react-redux';
 import { registerUser } from '../../store/authAction';
+import axios from 'axios';
 
 
 function SignIn() {
@@ -77,27 +78,46 @@ function SignIn() {
           })}
           onSubmit={(values, { setSubmitting }) => {
             setTimeout(async () => {
-              setLoading(true);
-              const resultAction = await dispatch(
-                login({
+              try {
+                setLoading(true);
+                await axios.post('http://localhost:5000/user/login', {
                   email: values.email,
                   password: values.password,
                   device_id: window.location.hostname,
-                })
-              );
-              if (login.fulfilled.match(resultAction)) {
+                }
+                )
+                .then(res=>{
+                  console.log(res,"{{{{{}}}}}")
+                });
+                
                 setErrortext("");
                 setLoading(false);
                 setSubmitting(false);
-                navigate("/dashboard");
-              } else {
-                if (resultAction.payload) {
-                  setErrortext(resultAction.payload.message);
-                }
-                setErrortext(resultAction.payload.message);
+              } catch (error) {
+                setLoading(false);
+                setSubmitting(false);
+                console.error('Error signing up user:', error);
               }
-              setLoading(false);
-              setSubmitting(false);
+            //   const resultAction = await dispatch(
+                // login({
+                //   email: values.email,
+                //   password: values.password,
+                //   device_id: window.location.hostname,
+                // })
+            //   );
+            //   if (login.fulfilled.match(resultAction)) {
+            //     setErrortext("");
+            //     setLoading(false);
+            //     setSubmitting(false);
+            //     navigate("/dashboard");
+            //   } else {
+            //     if (resultAction.payload) {
+            //       setErrortext(resultAction.payload.message);
+            //     }
+            //     setErrortext(resultAction.payload.message);
+            //   }
+            //   setLoading(false);
+            //   setSubmitting(false);
             }, 400);
           }}
         >
@@ -149,18 +169,7 @@ function SignIn() {
               className="flex items-center justify-center focus:shadow-outline mt-10 font-semibold bg-bgprimary text-white py-3 rounded text-sm"
             >
               {loading ? (
-                <Oval
-                  height={20}
-                  width={20}
-                  color="#fff"
-                  wrapperStyle={{}}
-                  wrapperClass=""
-                  visible={true}
-                  ariaLabel="oval-loading"
-                  secondaryColor="#fff"
-                  strokeWidth={5}
-                  strokeWidthSecondary={5}
-                />
+                <p>Loading ...</p>
               ) : (
                 "Sign In"
               )}
