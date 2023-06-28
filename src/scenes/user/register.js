@@ -3,16 +3,46 @@ import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
 // import { useSelector, useDispatch } from 'react-redux';
-import { registerUser } from '../../store/authAction';
-
+// import { registerUser } from '../../store/authAction';
+import { connect } from 'react-redux';
+// import { createUser } from '../../redux/userActions';
+import axios from 'axios';
+import baseUrl from '../../redux/baseUrl';
 
 function SignUp() {
   const [errortext, setErrortext] = useState("");
   const [loading, setLoading] = useState(false);
+  const [firstName,setFirstName] = useState('');
+  const [lastName, setLastName ] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [loader, setLoader] = useState('none');
   // const { userInfo, error, success } = useSelector(
   //   (state) => state.user
   // )
   // const dispatch = useDispatch()
+
+  const handleSubmit = () => {
+    baseUrl
+      .post("/user/signup", {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password,
+        phone: phone,
+      })
+      .then((result) => {
+        console.log(result);
+        setLoader("none");
+        setDispErr("User registered successfully");
+        setResColor("#00d15e");
+      })
+      .catch((error) => {
+        setLoader("none");
+        console.log(error);
+      });
+  };
 
   return (
     <div className="flex h-full font-poppins">
@@ -101,7 +131,7 @@ function SignUp() {
             }, 400);
           }}
         >
-          <Form className="flex flex-col justify-center">
+          <Form className="flex flex-col justify-center" onSubmit={(e)=> e.preventDefault()}>
             <label
               htmlFor="firstName"
               className="mb-2 mt-6 font-base text-dark-green font-semibold"
@@ -113,6 +143,11 @@ function SignUp() {
               type="text"
               className="focus:shadow-outline w-full  appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
               placeholder="Please Enter Your First Name"
+              value = {firstName}
+              required
+                onChange={(e) => {
+                  setFirstName(e.target.value);
+                }}
             />
             <ErrorMessage name="firstName">
               {(msg) => <div className="my-1 text-red-500 text-sm">{msg}</div>}
@@ -129,6 +164,11 @@ function SignUp() {
               type="text"
               className="focus:shadow-outline w-full  appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
               placeholder="Please Enter Your Last Name"
+              value = { lastName }
+              required
+                onChange={(e) => {
+                  setLastName(e.target.value);
+                }}
             />
             <ErrorMessage name="lastName">
               {(msg) => <div className="my-1 text-red-500 text-sm">{msg}</div>}
@@ -144,8 +184,34 @@ function SignUp() {
               type="email"
               className="focus:shadow-outline w-full  appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
               placeholder="Please Enter Your Email"
+              value = { email }
+              required
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
             />
             <ErrorMessage name="email">
+              {(msg) => <div className="my-1 text-red-500 text-sm">{msg}</div>}
+            </ErrorMessage>
+
+            <label
+              htmlFor="Phone"
+              className="mb-2 mt-6 font-base text-dark-green font-semibold"
+            >
+              Phone Number
+            </label>
+            <Field
+              name="phone"
+              type="text"
+              className="focus:shadow-outline w-full  appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
+              placeholder="Please Enter Your Last Name"
+              value = { phone }
+              required
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                }}
+            />
+            <ErrorMessage name="phone">
               {(msg) => <div className="my-1 text-red-500 text-sm">{msg}</div>}
             </ErrorMessage>
 
@@ -157,9 +223,14 @@ function SignUp() {
             </label>
             <Field
               name="password"
-              type="passoword"
+              type="password"
               className="focus:shadow-outline w-full appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
               placeholder="Please Enter Your Password"
+              value = { password }
+              required
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
             />
             <ErrorMessage name="password">
               {(msg) => <div className="my-1 text-red-500 text-sm">{msg}</div>}

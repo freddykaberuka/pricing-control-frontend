@@ -22,6 +22,7 @@ import SignIn from './scenes/user/signin';
 import Home from './scenes/home';
 import './index.css';
 import SignUp from './scenes/user/register';
+import Complaints from './scenes/complaints';
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -34,9 +35,9 @@ function App() {
   const isSignInPath = () => {
     return window.location.pathname === "/signin";
   };
-  const isSignUpPath = () =>{
-    return window.location.path === "/signup"
-  };
+  // const isSignUpPath = () =>{
+  //   return window.location.path === "/signup"
+  // };
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -44,14 +45,15 @@ function App() {
         <CssBaseline />
         <div className="app">
           <div className='w-full'>
-          {!isSignInPath() && !isHomePath() && isSignUpPath() && <Topbar setIsSidebar={setIsSidebar} />}
+          {!isSignInPath() && !isHomePath() && <Topbar setIsSidebar={setIsSidebar} />}
           <main className="content" style={{ display: "flex" }}>
-            {!isSignInPath() && !isHomePath() && isSignUpPath() && isSidebar && <Sidebar isSidebar={isSidebar} />}
+            {!isSignInPath() && !isHomePath() && isSidebar && <Sidebar isSidebar={isSidebar} />}
             <Box flexGrow={1}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/team" element={<Team />} />
                 <Route path="/contacts" element={<Contacts />} />
+                <Route path="/complaints" element ={<Complaints />} />
                 <Route path="/invoices" element={<Invoices />} />
                 <Route path="/form" element={<Form />} />
                 <Route path="/calendar" element={<Calendar />} />

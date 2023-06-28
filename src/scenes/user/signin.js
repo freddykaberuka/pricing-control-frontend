@@ -1,18 +1,40 @@
 import React, { useState, useEffect } from 'react'
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
-// import { useSelector, useDispatch } from 'react-redux';
-import { registerUser } from '../../store/authAction';
-
+import { Link, useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+// import { registerUser } from '../../store/authAction';
+// import { fetchProfile } from '../../redux/profileActions';
+import api from '../../redux/baseUrl';
 
 function SignIn() {
   const [errortext, setErrortext] = useState("");
   const [loading, setLoading] = useState(false);
+  // const history = useHistory();
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   // const { userInfo, error, success } = useSelector(
   //   (state) => state.user
   // )
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+  const postData = () => {
+    api
+      .post("/user/login", {
+        password: password,
+        email: email,
+      })
+      .then((result) => {
+        localStorage.setItem("token", result.data.data.accessToken);
+        // dispatch(fetchProfile());
+
+        console.log(result, "first");
+        return result;
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+  };
 
   return (
     <div className="flex h-full font-poppins">
@@ -101,7 +123,10 @@ function SignIn() {
             }, 400);
           }}
         >
-          <Form className="flex flex-col justify-center">
+          <Form className="flex flex-col justify-center" onSubmit={(e) => {
+              e.preventDefault();
+              postData();
+            }}>
             <label
               htmlFor="email"
               className="mb-2 mt-6 font-base text-dark-green font-semibold"
@@ -113,6 +138,11 @@ function SignIn() {
               type="email"
               className="focus:shadow-outline w-full  appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
               placeholder="Please Enter Your Email"
+              value={email}
+                required
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
             />
             <ErrorMessage name="email">
               {(msg) => <div className="my-1 text-red-500 text-sm">{msg}</div>}
@@ -126,9 +156,14 @@ function SignIn() {
             </label>
             <Field
               name="password"
-              type="passoword"
+              type="password"
               className="focus:shadow-outline w-full appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
               placeholder="Please Enter Your Password"
+              value={password}
+                required
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
             />
             <ErrorMessage name="password">
               {(msg) => <div className="my-1 text-red-500 text-sm">{msg}</div>}
