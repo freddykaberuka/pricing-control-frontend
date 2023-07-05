@@ -1,13 +1,10 @@
-// rootReducer.js
+import { configureStore } from '@reduxjs/toolkit';
+import commodityReducer from './commoditySlice';
 
-import { combineReducers } from 'redux';
-import userReducer from './userReducer';
-import complaintsReducer from './reducer/complaintsReducer'
-
-const rootReducer = combineReducers({
-  user: userReducer,
-  complaints: complaintsReducer,
-  // Add other reducers here if needed
+const store = configureStore({
+  reducer: {
+    commodity: commodityReducer,
+  },
 });
 
-export default rootReducer;
+export default store;
