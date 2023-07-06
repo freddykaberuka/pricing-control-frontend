@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useEffect } from 'react';
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import { mockTransactions } from "../../data/mockData";
@@ -14,11 +14,29 @@ import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
 import MainChart from "../../components/MainChart";
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserList } from '../../redux/userSlice';
+import { getComplaintList } from "../../redux/complaintSlice";
+import { getCommodityList } from "../../redux/commoditySlice";
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const userList = useSelector((state)=>state.user.userList);
+  const complaintList = useSelector((state) => state.complaint.complaintList);
+  const commodityList = useSelector((state) => state.commodity.commodityList);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  useEffect(() => {
+      dispatch(getUserList());
+    }, []);
+    useEffect(() => {
+      dispatch(getComplaintList());
+    }, []);
+    useEffect(() => {
+      dispatch(getCommodityList());
+    }, []);
 
+  console.log(userList.length,'123');
   return (
     <Box m="20px">Welcome to MINACOM Dashboard
       {/* HEADER */}
@@ -57,10 +75,10 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="12"
+            title={complaintList.length}
             subtitle="Total Complaint"
-            progress="0.75"
-            increase="+14%"
+            progress={complaintList.length<10 ? ( "0.10") : complaintList.length<20 ? "0.20":"0.30"}
+            increase={"+"+complaintList.length+"%"}
             icon={
               <EmailIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -76,10 +94,10 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="4"
+            title={commodityList.length}
             subtitle="Total Commodity"
-            progress="0.50"
-            increase="+21%"
+            progress={commodityList.length<10 ? ( "0.10") : commodityList.length<20 ? "0.20":"0.30"}
+            increase={"+"+commodityList.length+"%"}
             icon={
               <PointOfSaleIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -95,10 +113,10 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="32,441"
+            title={userList.length}
             subtitle="Registered User"
-            progress="0.30"
-            increase="+5%"
+            progress={userList.length<10 ? ( "0.10") : userList.length<20 ? "0.20":"0.30"}
+            increase={"+"+userList.length+"%"}
             icon={
               <PersonAddIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -114,10 +132,10 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="1,325,134"
+            title="0"
             subtitle="Traffic Received"
-            progress="0.80"
-            increase="+43%"
+            progress="0"
+            increase="+0%"
             icon={
               <TrafficIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}

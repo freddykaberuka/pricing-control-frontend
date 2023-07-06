@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box } from "@mui/material";
-import Team from "./scenes/team";
 import { useState } from "react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
@@ -23,6 +22,7 @@ import Home from './scenes/home';
 import './index.css';
 import SignUp from './scenes/user/register';
 import Complaints from './scenes/complaints';
+import Users from './scenes/users';
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -51,7 +51,7 @@ function App() {
             <Box flexGrow={1}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/team" element={<Team />} />
+                <Route path="/users" element={<Users />} />
                 <Route path="/commodity" element={<Commodity />} />
                 <Route path="/complaints" element ={<Complaints />} />
                 <Route path="/invoices" element={<Invoices />} />
