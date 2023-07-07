@@ -1,4 +1,4 @@
-import React,{ useEffect } from 'react';
+import React,{ useEffect,useState } from 'react';
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import { mockTransactions } from "../../data/mockData";
@@ -21,6 +21,7 @@ import { getCommodityList } from "../../redux/commoditySlice";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const [revenueGenerated, setRevenueGenerated] = useState(0);
   const userList = useSelector((state)=>state.user.userList);
   const complaintList = useSelector((state) => state.complaint.complaintList);
   const commodityList = useSelector((state) => state.commodity.commodityList);
@@ -36,7 +37,26 @@ const Dashboard = () => {
       dispatch(getCommodityList());
     }, []);
 
-  console.log(userList.length,'123');
+
+  useEffect(() => {
+  if (commodityList.length > 0) {
+    const totalPrice = commodityList.reduce((total, commodity) => {
+      return total + Number(commodity.current_price);
+    }, 0);
+
+    const totalUnity = commodityList.reduce((total, commodity) => {
+      return total + Number(commodity.unity_price);
+    }, 0);
+
+    const revenue = totalPrice - totalUnity;
+    setRevenueGenerated(revenue);
+  }
+}, [commodityList]);
+  const formattedRevenue = revenueGenerated.toLocaleString(undefined, {
+    style: 'currency',
+    currency: 'RWF',
+  });
+
   return (
     <Box m="20px">Welcome to MINACOM Dashboard
       {/* HEADER */}
@@ -152,7 +172,7 @@ const Dashboard = () => {
           p="30px"
         >
           <Typography variant="h5" fontWeight="600">
-            Campaign
+            Revenue
           </Typography>
           <Box
             display="flex"
@@ -166,7 +186,7 @@ const Dashboard = () => {
               color={colors.greenAccent[500]}
               sx={{ mt: "15px" }}
             >
-              $48,352 revenue generated
+               {formattedRevenue} revenue generated
             </Typography>
             <Typography>Includes extra misc expenditures and costs</Typography>
           </Box>

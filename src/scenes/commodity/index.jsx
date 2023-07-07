@@ -14,7 +14,8 @@ const columns = [
     cellClassName: "name-column--cell no-border-bottom",
   },
   { field: "category", headerName: "CATEGORY",flex: 1 },
-  { field: "unity_price", headerName: "UNIT PRICE", type: "number", headerAlign: "left", align: "left", flex: 1},
+  { field: "current_price", headerName: "EXISTED PRICE", type: "number", headerAlign: "left", align: "left", flex: 1},
+  { field: "unity_price", headerName: "NEW PRICE", type: "number", headerAlign: "left", align: "left", flex: 1},
   { field: "createdAt", headerName: "DATE OF PUBLISHED", flex: 1 },
   
 ];
