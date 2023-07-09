@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUserList } from '../../redux/userSlice';
 import { getComplaintList } from "../../redux/complaintSlice";
 import { getCommodityList } from "../../redux/commoditySlice";
+import { Link } from 'react-router-dom'
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -93,7 +94,7 @@ const Dashboard = () => {
           display="flex"
           alignItems="center"
           justifyContent="center"
-        >
+        ><Link to='/complaints'>
           <StatBox
             title={complaintList.length}
             subtitle="Total Complaint"
@@ -105,6 +106,7 @@ const Dashboard = () => {
               />
             }
           />
+          </Link>
         </Box>
         <Box
           gridColumn="span 3"
@@ -113,6 +115,7 @@ const Dashboard = () => {
           alignItems="center"
           justifyContent="center"
         >
+          <Link to='/commodity'>
           <StatBox
             title={commodityList.length}
             subtitle="Total Commodity"
@@ -124,6 +127,7 @@ const Dashboard = () => {
               />
             }
           />
+         </Link>
         </Box>
         <Box
           gridColumn="span 3"
@@ -132,6 +136,7 @@ const Dashboard = () => {
           alignItems="center"
           justifyContent="center"
         >
+          <Link to='/users'>
           <StatBox
             title={userList.length}
             subtitle="Registered User"
@@ -143,6 +148,7 @@ const Dashboard = () => {
               />
             }
           />
+        </Link>
         </Box>
         <Box
           gridColumn="span 3"

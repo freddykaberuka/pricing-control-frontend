@@ -35,9 +35,9 @@ function App() {
   const isSignInPath = () => {
     return window.location.pathname === "/signin";
   };
-  // const isSignUpPath = () =>{
-  //   return window.location.path === "/signup"
-  // };
+  const isSignUpPath = () =>{
+    return window.location.pathname === "/signup"
+  };
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -45,9 +45,9 @@ function App() {
         <CssBaseline />
         <div className="app">
           <div className='w-full'>
-          {!isSignInPath() && !isHomePath() && <Topbar setIsSidebar={setIsSidebar} />}
+          {!isSignInPath() && !isHomePath() && !isSignUpPath()&& <Topbar setIsSidebar={setIsSidebar} />}
           <main className="content" style={{ display: "flex" }}>
-            {!isSignInPath() && !isHomePath() && isSidebar && <Sidebar isSidebar={isSidebar} />}
+            {!isSignInPath() && !isHomePath() && !isSignUpPath() && isSidebar && <Sidebar isSidebar={isSidebar} />}
             <Box flexGrow={1}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />

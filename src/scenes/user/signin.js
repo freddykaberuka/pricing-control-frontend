@@ -10,30 +10,31 @@ import api from '../../redux/baseUrl';
 function SignIn() {
   const [errortext, setErrortext] = useState("");
   const [loading, setLoading] = useState(false);
-  // const history = useHistory();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  // const { userInfo, error, success } = useSelector(
-  //   (state) => state.user
-  // )
   const dispatch = useDispatch();
+  // const history = useHistory();
 
-  const postData = () => {
-    api
-      .post("/user/login", {
-        password: password,
-        email: email,
-      })
-      .then((result) => {
-        localStorage.setItem("token", result.data.data.accessToken);
-        // dispatch(fetchProfile());
-
-        console.log(result, "first");
-        return result;
-      })
-      .catch((error) => {
-        console.log(error)
-      });
+  const handleSubmit = async (values) => {
+    try {
+      setLoading(true);
+      const resultAction = await dispatch(
+        login({
+          email: values.email,
+          password: values.password,
+        })
+      );
+      setLoading(false);
+      if (login.fulfilled.match(resultAction)) {
+        setErrortext('');
+        history.push('/dashboard');
+      } else {
+        setErrortext(resultAction.payload.message || 'Login failed');
+      }
+    } catch (error) {
+      setLoading(false);
+      setErrortext('Login failed');
+    }
   };
 
   return (
@@ -87,46 +88,17 @@ function SignIn() {
           Welcome back to your account
         </p>
         <Formik
-          initialValues={{ email: "", password: "" }}
-          validationSchema={Yup.object({
-            email: Yup.string()
-              .email("Invalid email address")
-              .required("Required"),
-            password: Yup.string()
-              .min(6, "Too Short!")
-              .max(50, "Too Long!")
-              .required("Required"),
-          })}
-          onSubmit={(values, { setSubmitting }) => {
-            setTimeout(async () => {
-              setLoading(true);
-              const resultAction = await dispatch(
-                login({
-                  email: values.email,
-                  password: values.password,
-                  device_id: window.location.hostname,
-                })
-              );
-              if (login.fulfilled.match(resultAction)) {
-                setErrortext("");
-                setLoading(false);
-                setSubmitting(false);
-                navigate("/dashboard");
-              } else {
-                if (resultAction.payload) {
-                  setErrortext(resultAction.payload.message);
-                }
-                setErrortext(resultAction.payload.message);
-              }
-              setLoading(false);
-              setSubmitting(false);
-            }, 400);
-          }}
-        >
-          <Form className="flex flex-col justify-center" onSubmit={(e) => {
-              e.preventDefault();
-              postData();
-            }}>
+        initialValues={{ email: '', password: '' }}
+        validationSchema={Yup.object({
+          email: Yup.string().email('Invalid email address').required('Required'),
+          password: Yup.string()
+            .min(6, 'Too Short!')
+            .max(50, 'Too Long!')
+            .required('Required'),
+        })}
+        onSubmit={handleSubmit}
+      >
+          <Form className="flex flex-col justify-center">
             <label
               htmlFor="email"
               className="mb-2 mt-6 font-base text-dark-green font-semibold"
