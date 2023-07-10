@@ -23,6 +23,7 @@ import './index.css';
 import SignUp from './scenes/user/register';
 import Complaints from './scenes/complaints';
 import Users from './scenes/users';
+import CommodityForm from './scenes/commodity/commodity';
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -53,6 +54,7 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/users" element={<Users />} />
                 <Route path="/commodity" element={<Commodity />} />
+                <Route path="/addcommodity" element={ <CommodityForm />} />
                 <Route path="/complaints" element ={<Complaints />} />
                 <Route path="/invoices" element={<Invoices />} />
                 <Route path="/form" element={<Form />} />

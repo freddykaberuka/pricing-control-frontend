@@ -4,6 +4,8 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Header from "../../components/Header";
 import { addCommodity, getCommodityList } from "../../redux/commoditySlice";
+import { Button, TextField } from "@mui/material";
+import { Link } from 'react-router-dom'
 
 const columns = [
   { field: "id", headerName: "ID", flex: 0.5 },
@@ -34,7 +36,12 @@ const Commodity = () => {
   return (
     <Box m="20px">
       <Header title="Commodity Info" subtitle="List of Commodities" />
-      {console.log(commodityList, '***')}
+      <Box display="flex" justifyContent="end" mt="20px" mb="10px">
+              <Link to='/addcommodity'><Button type="submit" color="secondary" variant="contained">
+                Add Commodity
+              </Button>
+              </Link>
+            </Box>
       {loading ? (
         <p>Loading...</p>
       ) : error ? (

@@ -53,10 +53,14 @@ export const signup = createAsyncThunk(
       const response = await api.post('user/signup', userData);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      }
+      return rejectWithValue({ message: 'Registration failed' });
     }
   }
 );
+
 
 // Create the user Slice
 const userSlice = createSlice({

@@ -1,48 +1,48 @@
-import React, { useState, useEffect } from 'react'
-import { Field, Form, Formik, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { Link } from "react-router-dom";
-// import { useSelector, useDispatch } from 'react-redux';
-// import { registerUser } from '../../store/authAction';
-import { connect } from 'react-redux';
-// import { createUser } from '../../redux/userActions';
-import axios from 'axios';
-import baseUrl from '../../redux/baseUrl';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux'; // Add this import statement
+import { Link, useNavigate } from 'react-router-dom';
+import { Field, Form, Formik, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { signup } from '../../redux/userSlice';
+
 
 function SignUp() {
-  const [errortext, setErrortext] = useState("");
+  const [errortext, setErrortext] = useState('');
   const [loading, setLoading] = useState(false);
-  const [firstName,setFirstName] = useState('');
-  const [lastName, setLastName ] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
-  const [loader, setLoader] = useState('none');
-  // const { userInfo, error, success } = useSelector(
-  //   (state) => state.user
-  // )
-  // const dispatch = useDispatch()
 
-  const handleSubmit = () => {
-    baseUrl
-      .post("/user/signup", {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password,
-        phone: phone,
-      })
-      .then((result) => {
-        console.log(result);
-        setLoader("none");
-        setDispErr("User registered successfully");
-        setResColor("#00d15e");
-      })
-      .catch((error) => {
-        setLoader("none");
-        console.log(error);
-      });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (values) => {
+    try {
+      setLoading(true);
+      const resultAction = await dispatch(
+        signup({
+          firstName: values.firstName,
+          lastName: values.lastName,
+          email: values.email,
+          password: values.password,
+          phone: values.phone,
+        })
+      );
+      setLoading(false);
+      if (signup.fulfilled.match(resultAction)) {
+        setErrortext('');
+        navigate('/');
+      } else {
+        setErrortext(resultAction.payload.message || 'Registration failed');
+      }
+    } catch (error) {
+      setLoading(false);
+      setErrortext('Registration failed');
+    }
   };
+
 
   return (
     <div className="flex h-full font-poppins">
@@ -95,41 +95,25 @@ function SignUp() {
           Welcome back to your account
         </p>
         <Formik
-          initialValues={{ email: "", password: "" }}
+          iinitialValues={{
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    phone: ''
+  }}
           validationSchema={Yup.object({
             email: Yup.string()
-              .email("Invalid email address")
-              .required("Required"),
+              .email("Invalid email address"),
             password: Yup.string()
               .min(6, "Too Short!")
               .max(50, "Too Long!")
-              .required("Required"),
           })}
           onSubmit={(values, { setSubmitting }) => {
-            setTimeout(async () => {
-              setLoading(true);
-              const resultAction = await dispatch(
-                login({
-                  email: values.email,
-                  password: values.password,
-                  device_id: window.location.hostname,
-                })
-              );
-              if (login.fulfilled.match(resultAction)) {
-                setErrortext("");
-                setLoading(false);
-                setSubmitting(false);
-                navigate("/dashboard");
-              } else {
-                if (resultAction.payload) {
-                  setErrortext(resultAction.payload.message);
-                }
-                setErrortext(resultAction.payload.message);
-              }
-              setLoading(false);
-              setSubmitting(false);
-            }, 400);
-          }}
+  handleSubmit(values);
+  setSubmitting(false);
+}}
+
         >
           <Form className="flex flex-col justify-center" onSubmit={(e)=> e.preventDefault()}>
             <label
@@ -185,7 +169,6 @@ function SignUp() {
               className="focus:shadow-outline w-full  appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
               placeholder="Please Enter Your Email"
               value = { email }
-              required
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
@@ -227,7 +210,6 @@ function SignUp() {
               className="focus:shadow-outline w-full appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
               placeholder="Please Enter Your Password"
               value = { password }
-              required
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
@@ -251,29 +233,16 @@ function SignUp() {
               className="flex items-center justify-center focus:shadow-outline mt-10 font-semibold bg-bgprimary text-white py-3 rounded text-sm"
             >
               {loading ? (
-                <Oval
-                  height={20}
-                  width={20}
-                  color="#fff"
-                  wrapperStyle={{}}
-                  wrapperClass=""
-                  visible={true}
-                  ariaLabel="oval-loading"
-                  secondaryColor="#fff"
-                  strokeWidth={5}
-                  strokeWidthSecondary={5}
-                />
+                <p>Loading...</p>
               ) : (
                 "Sign Up"
               )}
             </button>
             <div className="text-bgprimary mt-6 text-sm font-medium">
               Do not have an account yet?{" "}
-              <a className="text-bgyellow" href="">
-                <Link to="/signin">
-                Login here
-                </Link>
-              </a>
+              <span className="text-bgyellow">
+                <Link to="/signin">Login here</Link>
+              </span>
             </div>
           </Form>
         </Formik>
