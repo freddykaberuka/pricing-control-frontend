@@ -19,29 +19,36 @@ function SignUp() {
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
-    try {
-      setLoading(true);
-      const resultAction = await dispatch(
-        signup({
-          firstName: values.firstName,
-          lastName: values.lastName,
-          email: values.email,
-          password: values.password,
-          phone: values.phone,
-        })
-      );
-      setLoading(false);
-      if (signup.fulfilled.match(resultAction)) {
+  console.log('handleSubmit called');
+  try {
+    setLoading(true);
+    const resultAction = await dispatch(
+      signup({
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        password: values.password,
+        phone: values.phone,
+      })
+    );
+    setLoading(false);
+    if (signup.fulfilled.match(resultAction.type)) {
+      const response = resultAction.payload;
+      if (response.success) {
         setErrortext('');
         navigate('/');
       } else {
-        setErrortext(resultAction.payload.message || 'Registration failed');
+        setErrortext(response.message || 'Registration failed');
       }
-    } catch (error) {
-      setLoading(false);
-      setErrortext('Registration failed');
+    } else {
+      setErrortext(resultAction.payload.message || 'Registration failed');
     }
-  };
+  } catch (error) {
+    setLoading(false);
+    setErrortext('Registration failed');
+  }
+};
+
 
 
   return (
@@ -95,13 +102,13 @@ function SignUp() {
           Welcome back to your account
         </p>
         <Formik
-          iinitialValues={{
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    phone: ''
-  }}
+          initialValues={{
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+            phone: ''
+          }}
           validationSchema={Yup.object({
             email: Yup.string()
               .email("Invalid email address"),
@@ -110,12 +117,12 @@ function SignUp() {
               .max(50, "Too Long!")
           })}
           onSubmit={(values, { setSubmitting }) => {
-  handleSubmit(values);
-  setSubmitting(false);
-}}
+            handleSubmit(values);
+            setSubmitting(false);
+          }}
 
         >
-          <Form className="flex flex-col justify-center" onSubmit={(e)=> e.preventDefault()}>
+          <Form className="flex flex-col justify-center">
             <label
               htmlFor="firstName"
               className="mb-2 mt-6 font-base text-dark-green font-semibold"
@@ -127,12 +134,9 @@ function SignUp() {
               type="text"
               className="focus:shadow-outline w-full  appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
               placeholder="Please Enter Your First Name"
-              value = {firstName}
               required
-                onChange={(e) => {
-                  setFirstName(e.target.value);
-                }}
             />
+
             <ErrorMessage name="firstName">
               {(msg) => <div className="my-1 text-red-500 text-sm">{msg}</div>}
             </ErrorMessage>
@@ -148,11 +152,7 @@ function SignUp() {
               type="text"
               className="focus:shadow-outline w-full  appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
               placeholder="Please Enter Your Last Name"
-              value = { lastName }
               required
-                onChange={(e) => {
-                  setLastName(e.target.value);
-                }}
             />
             <ErrorMessage name="lastName">
               {(msg) => <div className="my-1 text-red-500 text-sm">{msg}</div>}
@@ -168,10 +168,7 @@ function SignUp() {
               type="email"
               className="focus:shadow-outline w-full  appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
               placeholder="Please Enter Your Email"
-              value = { email }
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
+              required
             />
             <ErrorMessage name="email">
               {(msg) => <div className="my-1 text-red-500 text-sm">{msg}</div>}
@@ -188,11 +185,7 @@ function SignUp() {
               type="text"
               className="focus:shadow-outline w-full  appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
               placeholder="Please Enter Your Last Name"
-              value = { phone }
               required
-                onChange={(e) => {
-                  setPhone(e.target.value);
-                }}
             />
             <ErrorMessage name="phone">
               {(msg) => <div className="my-1 text-red-500 text-sm">{msg}</div>}
@@ -209,10 +202,7 @@ function SignUp() {
               type="password"
               className="focus:shadow-outline w-full appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
               placeholder="Please Enter Your Password"
-              value = { password }
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
+              required
             />
             <ErrorMessage name="password">
               {(msg) => <div className="my-1 text-red-500 text-sm">{msg}</div>}
@@ -229,15 +219,13 @@ function SignUp() {
               </div>
             </Link>
             <button
-              type="submit"
-              className="flex items-center justify-center focus:shadow-outline mt-10 font-semibold bg-bgprimary text-white py-3 rounded text-sm"
-            >
-              {loading ? (
-                <p>Loading...</p>
-              ) : (
-                "Sign Up"
-              )}
-            </button>
+  type="submit"
+  className="flex items-center justify-center focus:shadow-outline mt-10 font-semibold bg-bgprimary text-white py-3 rounded text-sm"
+  onClick={handleSubmit} // Add this line
+>
+  {loading ? <p>Loading...</p> : "Sign Up"}
+</button>
+
             <div className="text-bgprimary mt-6 text-sm font-medium">
               Do not have an account yet?{" "}
               <span className="text-bgyellow">
