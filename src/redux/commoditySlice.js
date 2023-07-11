@@ -47,6 +47,11 @@ export const getCommodityById = createAsyncThunk(
   }
 );
 
+export const selectCommodityById = (state, commodityId) => {
+  return state.commodity.commodityList.find((commodity) => commodity.id === commodityId);
+};
+
+
 export const updateCommodity = createAsyncThunk(
   'commodity/updateCommodity',
   async (commodityData, { rejectWithValue }) => {
