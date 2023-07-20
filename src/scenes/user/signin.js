@@ -10,31 +10,30 @@ function SignIn({ setIsAuthenticated }) {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
- const handleSubmit = async (values) => {
-  try {
-    setLoading(true);
-    const resultAction = await dispatch(
-      login({
-        email: values.email,
-        password: values.password,
-      })
-    );
-    setLoading(false);
 
-    if (resultAction.type === login.fulfilled.type) { // Check the action type
-      setErrortext('');
-      setIsAuthenticated(true); // Set isAuthenticated to true upon successful login
-      navigate('/');
-    } else if (resultAction.type === login.rejected.type) { // Check the action type
-      setErrortext(resultAction.payload?.message || 'Login failed');
+  const handleSubmit = async (values) => {
+    try {
+      setLoading(true);
+      const resultAction = await dispatch(
+        login({
+          email: values.email,
+          password: values.password,
+        })
+      );
+      setLoading(false);
+
+      if ('error' in resultAction.payload) {
+        setErrortext(resultAction.payload.error || 'Login failed');
+      } else {
+        setErrortext('');
+        setIsAuthenticated(true); // Set isAuthenticated to true upon successful login
+        navigate('/');
+      }
+    } catch (error) {
+      setLoading(false);
+      setErrortext('Login failed');
     }
-  } catch (error) {
-    setLoading(false);
-    setErrortext('Login failed');
-  }
-};
-
+  };
 
   return (
     <div className="flex h-full font-poppins">
