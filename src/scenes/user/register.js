@@ -38,14 +38,14 @@ function SignUp() {
         setErrortext('');
         navigate('/');
       } else {
-        setErrortext(response.message || 'Registration failed');
+        setErrortext(response.message || 'user Registrated');
       }
     } else {
-      setErrortext(resultAction.payload.message || 'Registration failed');
+      setErrortext(resultAction.payload.message || 'user Registrated');
     }
   } catch (error) {
     setLoading(false);
-    setErrortext('Registration failed');
+    setErrortext('user Registrated');
   }
 };
 

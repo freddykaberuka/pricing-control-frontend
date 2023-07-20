@@ -5,6 +5,7 @@ import api from './baseUrl';
 const initialState = {
   userList: [],
   user: null,
+  userId: null,
   loading: false,
   error: null,
 };
@@ -39,12 +40,13 @@ export const login = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await api.post('user/login', { email, password });
-      return response.data;
+      return response.data; // Assuming the response contains the user data including the 'id' property
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
 );
+
 
 export const signup = createAsyncThunk(
   'user/signup',
@@ -98,10 +100,13 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
-        // Handle login success and store user information if necessary
+        console.log('Login Fulfilled:', action.payload);
+        state.user = action.payload; // Set the user state upon successful login
+        state.userId = action.payload.id; // Set the userId state upon successful login
         state.loading = false;
       })
       .addCase(login.rejected, (state, action) => {
+        console.log('Login Rejected:', action.error); // Check the error data
         state.error = action.payload;
         state.loading = false;
       })

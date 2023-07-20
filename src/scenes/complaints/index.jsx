@@ -12,7 +12,7 @@ const columns = [
   { field: "commodityName", headerName: "COMMODITY", flex: 1 },
   { field: "description", headerName: "DESCRIPTION", flex: 1 },
   {
-    field: "location_id",
+    field: "locationName",
     headerName: "LOCATION",
     flex: 1,
     // valueGetter: (params) => params.value || "", // Return the value as is if available
@@ -44,7 +44,7 @@ const Complaints = () => {
   const locationById = useMemo(() => {
     const locationMap = {};
     locationList.forEach((location) => {
-      locationMap[location.id] = location.location_name;
+      locationMap[location.id] = location.locationName;
     });
     return locationMap;
   }, [locationList]);
@@ -52,7 +52,7 @@ const Complaints = () => {
   const updatedComplaintList = complaintList.map((complaint) => ({
     ...complaint,
     commodityName: commodityById[complaint.commodity_id] || "",
-    location_id: locationById[complaint.location_id] || "",
+    locationName: locationById[complaint.locationId] || "",
   }));
 
   return (

@@ -5,16 +5,13 @@ import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/userSlice';
 
-function SignIn() {
-    const [errortext, setErrortext] = useState('');
+function SignIn({ setIsAuthenticated }) {
+  const [errortext, setErrortext] = useState('');
   const [loading, setLoading] = useState(false);
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-
-  const handleSubmit = async (values) => {
+  
+ const handleSubmit = async (values) => {
   try {
     setLoading(true);
     const resultAction = await dispatch(
@@ -24,10 +21,12 @@ function SignIn() {
       })
     );
     setLoading(false);
-    if (login.fulfilled.match(resultAction)) {
+
+    if (resultAction.type === login.fulfilled.type) { // Check the action type
       setErrortext('');
+      setIsAuthenticated(true); // Set isAuthenticated to true upon successful login
       navigate('/');
-    } else {
+    } else if (resultAction.type === login.rejected.type) { // Check the action type
       setErrortext(resultAction.payload?.message || 'Login failed');
     }
   } catch (error) {
@@ -35,6 +34,7 @@ function SignIn() {
     setErrortext('Login failed');
   }
 };
+
 
   return (
     <div className="flex h-full font-poppins">

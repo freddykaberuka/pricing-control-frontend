@@ -149,6 +149,13 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
+              title="Add Complaint"
+              to="/form"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
               title="Complaints"
               to="/complaints"
               icon={<ContactsOutlinedIcon />}
@@ -162,13 +169,7 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             /> */}
-            <Item
-              title="User Roles"
-              to="/form"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+            
 
             {/* <Item
               title="Profile Form"

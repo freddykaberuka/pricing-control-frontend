@@ -14,13 +14,18 @@ export const addComplaint = createAsyncThunk(
   'complaint/addComplaint',
   async (complaintData, { rejectWithValue }) => {
     try {
+      console.log('Adding complaint:', complaintData);
       const response = await api.post('complaint/add', complaintData);
+      console.log('API Response:', response.data);
       return response.data;
     } catch (error) {
+      console.error('API Error:', error);
       return rejectWithValue(error.response.data);
     }
   }
 );
+
+
 
 export const getComplaintList = createAsyncThunk(
   'complaint/getComplaintList',
