@@ -7,6 +7,7 @@ import Header from "../../components/Header";
 import { addComplaint } from '../../redux/complaintSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCommodityList } from '../../redux/commoditySlice';
+import { getLocationList } from '../../redux/locationSlice';
 
 const Form = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -17,9 +18,11 @@ const Form = () => {
 
   useEffect(() => {
     dispatch(getCommodityList());
+    dispatch(getLocationList());
   }, [dispatch]);
 
   const commodities = useSelector((state) => state.commodity.commodityList);
+  const locationList = useSelector((state) => state.location.locationList);
 
   const handleFormSubmit = async (values, { resetForm }) => {
     try {
@@ -86,9 +89,9 @@ const Form = () => {
               </TextField>
 
               <TextField
+                select
                 fullWidth
                 variant="filled"
-                type="text"
                 label="Location"
                 onBlur={handleBlur}
                 onChange={handleChange}
@@ -97,7 +100,14 @@ const Form = () => {
                 error={!!touched.locationId && !!errors.locationId}
                 helperText={touched.locationId && errors.locationId}
                 sx={{ gridColumn: "span 2" }}
-              />
+              >
+                {locationList.map((location) => (
+                  <MenuItem key={location.id} value={location.id}>
+                    {location.locationName}
+                  </MenuItem>
+                ))}
+              </TextField>
+
               <TextField
                 fullWidth
                 variant="filled"

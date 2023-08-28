@@ -59,7 +59,7 @@ const Dashboard = () => {
   });
 
   return (
-    <Box m="20px">Welcome to MINACOM Dashboard
+    <Box m="20px">Welcome to MINICOM Dashboard
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="Market Price Control and Analytic System" subtitle="Welcome to Rwanda Pricing and analytic Control" />
@@ -89,7 +89,7 @@ const Dashboard = () => {
       >
         {/* ROW 1 */}
         <Box
-          gridColumn="span 3"
+          gridColumn="span 4"
           backgroundColor={colors.primary[400]}
           display="flex"
           alignItems="center"
@@ -109,7 +109,7 @@ const Dashboard = () => {
           </Link>
         </Box>
         <Box
-          gridColumn="span 3"
+          gridColumn="span 4"
           backgroundColor={colors.primary[400]}
           display="flex"
           alignItems="center"
@@ -130,7 +130,7 @@ const Dashboard = () => {
          </Link>
         </Box>
         <Box
-          gridColumn="span 3"
+          gridColumn="span 4"
           backgroundColor={colors.primary[400]}
           display="flex"
           alignItems="center"
@@ -150,7 +150,7 @@ const Dashboard = () => {
           />
         </Link>
         </Box>
-        <Box
+        {/* <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
           display="flex"
@@ -168,7 +168,7 @@ const Dashboard = () => {
               />
             }
           />
-        </Box>
+        </Box> */}
 
         {/* ROW 3 */}
         <Box
