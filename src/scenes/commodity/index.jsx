@@ -5,12 +5,12 @@ import Box from "@mui/material/Box";
 import Header from "../../components/Header";
 import { getCommodityList } from "../../redux/commoditySlice";
 import { getLocationList } from "../../redux/locationSlice";
-import { Button, TextField, useTheme, IconButton } from "@mui/material";
+import { Button, TextField, useTheme } from "@mui/material";
 import { Link } from 'react-router-dom';
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import { tokens } from "../../theme";
-import { saveAs } from 'file-saver';
-import Papa from 'papaparse';
+import { Document, Page, Text, View, StyleSheet, PDFDownloadLink, Image } from '@react-pdf/renderer';
+import logo from '../../assets/images.jpeg'
 
 const columns = [
   { field: "id", headerName: "ID", flex: 0.5 },
@@ -21,6 +21,71 @@ const columns = [
   // { field: "locationName", headerName: "LOCATION", flex: 1},
   { field: "createdAt", headerName: "DATE OF PUBLISHED", flex: 1 },
 ];
+
+const styles = StyleSheet.create({
+  footer:{
+    fontSize: 10,
+    textAlign: 'right',
+    marginBottom: -1,
+  },
+  page: {
+    flexDirection: 'column',
+    backgroundColor: '#ffffff',
+    color: '#000000',
+    padding: 20,
+  },
+  title: {
+    fontSize: 18,
+    marginBottom: 10,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  table: {
+    display: 'table',
+    width: 'auto',
+    margin: 'auto',
+    borderStyle: 'solid',
+    borderColor: '#bfbfbf',
+    borderWidth: 1,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
+  },
+  tableRow: { margin: 'auto', flexDirection: 'row', marginTop: 0, marginBottom: 0 },
+  tableColHeader: {
+    width: '20%',
+    borderStyle: 'solid',
+    borderColor: '#bfbfbf',
+    borderBottomColor: '#000000',
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    padding: 4,
+    backgroundColor: '#f0f0f0',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  tableCol: {
+    fontSize: 14,
+    width: '20%',
+    borderStyle: 'solid',
+    borderColor: '#bfbfbf',
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    padding: 4,
+    textAlign: 'center',
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 20, 
+  },
+  logo: {
+    width: 100,
+    height: 100,
+  },
+  
+});
 
 const Commodity = () => {
   const [startDate, setStartDate] = useState(null);
@@ -74,10 +139,57 @@ const Commodity = () => {
     return filteredList;
   }, [startDate, endDate, nameFilter, updatedCommodityList]);
 
-  const generateAndDownloadReport = () => {
-    const csvData = Papa.unparse(filteredCommodityList, { header: true });
-    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-    saveAs(blob, 'commodity_report.csv');
+  const generateAndDownloadPDF = () => {
+    const fileName = 'commodity_report.pdf';
+
+    const MyDocument = (
+      <Document>
+        <Page style={styles.page}>
+          <view style={styles.logoContainer}>
+            <Image src={logo} style={styles.logo} />
+          </view>
+          <Text style={styles.title}>Commodity Report</Text>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableColHeader}>ID</Text>
+            <Text style={styles.tableColHeader}>Name</Text>
+            <Text style={styles.tableColHeader}>Category</Text>
+            <Text style={styles.tableColHeader}>Existing Price</Text>
+            <Text style={styles.tableColHeader}>New Price</Text>
+          </View>
+          {filteredCommodityList.map((commodity) => (
+            <View key={commodity.id} style={styles.tableRow}>
+              <Text style={styles.tableCol}>{commodity.id}</Text>
+              <Text style={styles.tableCol}>{commodity.Name}</Text>
+              <Text style={styles.tableCol}>{commodity.category}</Text>
+              <Text style={styles.tableCol}>{commodity.current_price}</Text>
+              <Text style={styles.tableCol}>{commodity.unity_price}</Text>
+            </View>
+          ))}
+          <Text style={styles.footer}>Done By Paccy</Text>
+        </Page>
+      </Document>
+    );
+
+    return (
+      <PDFDownloadLink document={MyDocument} fileName={fileName}>
+        {({ blob, url, loading, error }) =>
+          loading ? 'Loading document...' : (
+            <Button
+              sx={{
+                backgroundColor: colors.blueAccent[700],
+                color: colors.grey[100],
+                fontSize: "14px",
+                fontWeight: "bold",
+                padding: "10px 20px",
+              }}
+            >
+              <DownloadOutlinedIcon sx={{ mr: "10px" }} />
+              Download Reports
+            </Button>
+          )
+        }
+      </PDFDownloadLink>
+    );
   };
 
   return (
@@ -108,25 +220,15 @@ const Commodity = () => {
           value={nameFilter}
           onChange={(e) => setNameFilter(e.target.value)}
         />
-
         <Box>
-          <Button
-            sx={{
-              backgroundColor: colors.blueAccent[700],
-              color: colors.grey[100],
-              fontSize: "14px",
-              fontWeight: "bold",
-              padding: "10px 20px",
-            }}
-            onClick={generateAndDownloadReport}
-          >
-            <DownloadOutlinedIcon sx={{ mr: "10px" }} />
-            Download Reports
-          </Button>
+          {generateAndDownloadPDF()}
         </Box>
-
       </Box>
-      {loading ? <p>Loading...</p> : error ? <p>Error: {error}</p> : <DataGrid rows={filteredCommodityList} columns={columns} components={{ Toolbar: GridToolbar }} />}
+      {loading ? <p>Loading...</p> : error ? <p>Error: {error}</p> : (
+        <div id="commodity-report">
+          <DataGrid rows={filteredCommodityList} columns={columns} components={{ Toolbar: GridToolbar }} />
+        </div>
+      )}
     </Box>
   );
 };

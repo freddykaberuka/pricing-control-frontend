@@ -142,18 +142,6 @@ function SignIn({ setIsAuthenticated }) {
             >
               {loading ? (
                 <p>Loading...</p>
-                // <Oval
-                //   height={20}
-                //   width={20}
-                //   color="#fff"
-                //   wrapperStyle={{}}
-                //   wrapperClass=""
-                //   visible={true}
-                //   ariaLabel="oval-loading"
-                //   secondaryColor="#fff"
-                //   strokeWidth={5}
-                //   strokeWidthSecondary={5}
-                // />
               ) : (
                 "Sign In"
               )}
