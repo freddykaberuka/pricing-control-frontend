@@ -134,13 +134,13 @@ const Sidebar = () => {
             >
               
             </Typography>
-            <Item
+            {/* <Item
               title="List of Users"
               to="/users"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Item
               title="Commodity Info"
               to="/commodity"
