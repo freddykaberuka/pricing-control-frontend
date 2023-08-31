@@ -26,7 +26,11 @@ const styles = StyleSheet.create({
   footer:{
     fontSize: 10,
     textAlign: 'right',
-    marginBottom: -1,
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: 0,
+    marginRight: 20,
   },
   page: {
     flexDirection: 'column',
@@ -37,6 +41,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     marginBottom: 10,
+    marginTop: 20,
     fontWeight: 'bold',
     textAlign: 'center',
   },
@@ -76,14 +81,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   logoContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 20, 
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    marginRight: 20,
+    marginBottom: 20,
   },
   logo: {
     width: 100,
     height: 100,
   },
+  addresses: {
+    flexDirection: 'column',
+    marginTop: 10,
+    marginRight: 20,
+    fontSize: 12
+},
   
 });
 
@@ -146,7 +158,14 @@ const Commodity = () => {
       <Document>
         <Page style={styles.page}>
           <view style={styles.logoContainer}>
-            <Image src={logo} style={styles.logo} />
+            <Image src={logo} style={styles.logo} /><br></br>
+            <View style={styles.addresses}>
+              <Text style={styles.address}>Ministry Trade and Industry</Text><br></br>
+              <Text style={styles.address}>Address: KG 1 Roundabaout Kigali</Text><br></br>
+              <Text style={styles.address}>Phone: +250 788 000 000</Text><br></br>
+              <Text style={styles.address}>Email: </Text><br></br>
+              <Text style={styles.address}>P.O Box: 73 Kigali-Rwanda</Text>
+            </View>
           </view>
           <Text style={styles.title}>Commodity Report</Text>
           <View style={styles.tableRow}>
@@ -165,7 +184,7 @@ const Commodity = () => {
               <Text style={styles.tableCol}>{commodity.unity_price}</Text>
             </View>
           ))}
-          <Text style={styles.footer}>Done By Paccy</Text>
+          <Text style={styles.footer}>Done By MINACOM</Text>
         </Page>
       </Document>
     );
