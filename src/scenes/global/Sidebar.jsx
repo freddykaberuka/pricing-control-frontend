@@ -134,42 +134,50 @@ const Sidebar = () => {
             >
               
             </Typography>
-            <Item
+            {/* <Item
               title="List of Users"
-              to="/team"
+              to="/users"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Item
               title="Commodity Info"
-              to="/contacts"
+              to="/commodity"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
+              title="Add Complaint"
+              to="/form"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Complaints"
+              to="/complaints"
+              icon={<ContactsOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            {/* <Item
               title="Finances"
               to="/invoices"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
-            <Item
-              title="User Roles"
-              to="/form"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+            /> */}
+            
 
-            <Item
+            {/* <Item
               title="Profile Form"
               to="/form"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Item
               title="Calendar"
               to="/calendar"

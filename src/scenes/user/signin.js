@@ -1,18 +1,39 @@
-import React, { useState, useEffect } from 'react'
-import { Field, Form, Formik, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { Link } from "react-router-dom";
-// import { useSelector, useDispatch } from 'react-redux';
-import { registerUser } from '../../store/authAction';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Field, Form, Formik, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { login } from '../../redux/userSlice';
 
-
-function SignIn() {
-  const [errortext, setErrortext] = useState("");
+function SignIn({ setIsAuthenticated }) {
+  const [errortext, setErrortext] = useState('');
   const [loading, setLoading] = useState(false);
-  // const { userInfo, error, success } = useSelector(
-  //   (state) => state.user
-  // )
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (values) => {
+    try {
+      setLoading(true);
+      const resultAction = await dispatch(
+        login({
+          email: values.email,
+          password: values.password,
+        })
+      );
+      setLoading(false);
+
+      if ('error' in resultAction.payload) {
+        setErrortext(resultAction.payload.error || 'Login failed');
+      } else {
+        setErrortext('');
+        setIsAuthenticated(true); // Set isAuthenticated to true upon successful login
+        navigate('/');
+      }
+    } catch (error) {
+      setLoading(false);
+      setErrortext('Login failed');
+    }
+  };
 
   return (
     <div className="flex h-full font-poppins">
@@ -64,42 +85,13 @@ function SignIn() {
         <p className="py-1 text-sm border-gray-300 text-gray-400 mb-3">
           Welcome back to your account
         </p>
-        <Formik
-          initialValues={{ email: "", password: "" }}
+         <Formik
+          initialValues={{ email: '', password: '' }}
           validationSchema={Yup.object({
-            email: Yup.string()
-              .email("Invalid email address")
-              .required("Required"),
-            password: Yup.string()
-              .min(6, "Too Short!")
-              .max(50, "Too Long!")
-              .required("Required"),
+            email: Yup.string().email('Invalid email address').required('Required'),
+            password: Yup.string().required('Required'),
           })}
-          onSubmit={(values, { setSubmitting }) => {
-            setTimeout(async () => {
-              setLoading(true);
-              const resultAction = await dispatch(
-                login({
-                  email: values.email,
-                  password: values.password,
-                  device_id: window.location.hostname,
-                })
-              );
-              if (login.fulfilled.match(resultAction)) {
-                setErrortext("");
-                setLoading(false);
-                setSubmitting(false);
-                navigate("/dashboard");
-              } else {
-                if (resultAction.payload) {
-                  setErrortext(resultAction.payload.message);
-                }
-                setErrortext(resultAction.payload.message);
-              }
-              setLoading(false);
-              setSubmitting(false);
-            }, 400);
-          }}
+          onSubmit={handleSubmit}
         >
           <Form className="flex flex-col justify-center">
             <label
@@ -108,7 +100,7 @@ function SignIn() {
             >
               Email
             </label>
-            <Field
+             <Field
               name="email"
               type="email"
               className="focus:shadow-outline w-full  appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
@@ -126,7 +118,7 @@ function SignIn() {
             </label>
             <Field
               name="password"
-              type="passoword"
+              type="password"
               className="focus:shadow-outline w-full appearance-none rounded-md border border-gray-300 p-3 leading-tight text-gray-700 focus:outline-none text-sm"
               placeholder="Please Enter Your Password"
             />
@@ -149,18 +141,7 @@ function SignIn() {
               className="flex items-center justify-center focus:shadow-outline mt-10 font-semibold bg-bgprimary text-white py-3 rounded text-sm"
             >
               {loading ? (
-                <Oval
-                  height={20}
-                  width={20}
-                  color="#fff"
-                  wrapperStyle={{}}
-                  wrapperClass=""
-                  visible={true}
-                  ariaLabel="oval-loading"
-                  secondaryColor="#fff"
-                  strokeWidth={5}
-                  strokeWidthSecondary={5}
-                />
+                <p>Loading...</p>
               ) : (
                 "Sign In"
               )}

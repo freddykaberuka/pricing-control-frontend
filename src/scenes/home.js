@@ -1,15 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import underline from "../assets/underline.png";
 import busInside from "../assets/market.webp";
 import shapes from "../assets/shapes.png";
 // import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
 import Navbar from '../components/Navbar';
+import { Connect } from 'react-redux';
+import { fetchUsers } from '../redux/userActions'
 
-function Home() {
+function Home({ users, fetchUsers }) {
+  useEffect(() => {
+  fetchUsers();
+}, [fetchUsers]);
+
   return (
     <div className="lg:px-10 px-5 pb-10 pt-5 relative font-poppins h-screen overflow-y-scroll overflow-x-hidden">
       {/* <Navbar /> */}
+      <div>
+      {users.map((user) => (
+        <div key={user.id}>{user.name}</div>
+      ))}
+    </div>
       <Navbar />
       {/* rome-ignore lint/a11y/useAltText: <explanation> */}
       {/* rome-ignore lint/a11y/useAltText: <explanation> */}

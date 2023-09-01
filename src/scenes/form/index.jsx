@@ -1,24 +1,54 @@
-import React from 'react';
-import { Box, Button, TextField } from "@mui/material";
+import React, { useState, useEffect } from 'react';
+import { Box, Button, TextField, MenuItem } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
+import { addComplaint } from '../../redux/complaintSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCommodityList } from '../../redux/commoditySlice';
+import { getLocationList } from '../../redux/locationSlice';
 
 const Form = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  const dispatch = useDispatch();
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const userId = useSelector((state) => state.user.userId);
 
-  const handleFormSubmit = (values) => {
-    console.log(values);
+  useEffect(() => {
+    dispatch(getCommodityList());
+    dispatch(getLocationList());
+  }, [dispatch]);
+
+  const commodities = useSelector((state) => state.commodity.commodityList);
+  const locationList = useSelector((state) => state.location.locationList);
+
+  const handleFormSubmit = async (values, { resetForm }) => {
+    try {
+      const complaintData = {
+        ...values,
+        userId: userId, // Include the user ID in the complaint data
+      };
+      await dispatch(addComplaint(complaintData));
+      setSuccessMessage('Complaint added successfully');
+      resetForm();
+    } catch (error) {
+      setErrorMessage('Failed to add Complaint');
+    }
   };
 
   return (
     <Box m="20px">
-      <Header title="ADD USER" subtitle="Create a new profile for all uses" />
+      <Header title="ADD COMPLAINT" subtitle="Create a new complaint" />
 
       <Formik
         onSubmit={handleFormSubmit}
-        initialValues={initialValues}
+        initialValues={{
+          commodity_id: "",
+          locationId: "",
+          description: "",
+        }}
         validationSchema={checkoutSchema}
       >
         {({
@@ -39,87 +69,62 @@ const Form = () => {
               }}
             >
               <TextField
+                select
                 fullWidth
                 variant="filled"
-                type="text"
-                label="First Name"
+                label="Commodity"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.firstName}
-                name="firstName"
-                error={!!touched.firstName && !!errors.firstName}
-                helperText={touched.firstName && errors.firstName}
+                value={values.commodity_id}
+                name="commodity_id"
+                error={!!touched.commodity_id && !!errors.commodity_id}
+                helperText={touched.commodity_id && errors.commodity_id}
                 sx={{ gridColumn: "span 2" }}
-              />
+              >
+                {commodities.map((commodity) => (
+                  <MenuItem key={commodity.id} value={commodity.id}>
+                    {commodity.Name}
+                  </MenuItem>
+                ))}
+              </TextField>
+
               <TextField
+                select
                 fullWidth
                 variant="filled"
-                type="text"
-                label="Last Name"
+                label="Location"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.lastName}
-                name="lastName"
-                error={!!touched.lastName && !!errors.lastName}
-                helperText={touched.lastName && errors.lastName}
+                value={values.locationId}
+                name="locationId"
+                error={!!touched.locationId && !!errors.locationId}
+                helperText={touched.locationId && errors.locationId}
                 sx={{ gridColumn: "span 2" }}
-              />
+              >
+                {locationList.map((location) => (
+                  <MenuItem key={location.id} value={location.id}>
+                    {location.locationName}
+                  </MenuItem>
+                ))}
+              </TextField>
+
               <TextField
                 fullWidth
                 variant="filled"
                 type="text"
-                label="Email"
+                label="Complaint"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.email}
-                name="email"
-                error={!!touched.email && !!errors.email}
-                helperText={touched.email && errors.email}
-                sx={{ gridColumn: "span 4" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Contact Number"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.contact}
-                name="contact"
-                error={!!touched.contact && !!errors.contact}
-                helperText={touched.contact && errors.contact}
-                sx={{ gridColumn: "span 4" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Address 1"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.address1}
-                name="address1"
-                error={!!touched.address1 && !!errors.address1}
-                helperText={touched.address1 && errors.address1}
-                sx={{ gridColumn: "span 4" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Address 2"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.address2}
-                name="address2"
-                error={!!touched.address2 && !!errors.address2}
-                helperText={touched.address2 && errors.address2}
+                value={values.description}
+                name="description"
+                error={!!touched.description && !!errors.description}
+                helperText={touched.description && errors.description}
                 sx={{ gridColumn: "span 4" }}
               />
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
               <Button type="submit" color="secondary" variant="contained">
-                Create New User
+                ADD COMPLAINT
               </Button>
             </Box>
           </form>
@@ -129,27 +134,6 @@ const Form = () => {
   );
 };
 
-const phoneRegExp =
-  /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
-
-const checkoutSchema = yup.object().shape({
-  firstName: yup.string().required("required"),
-  lastName: yup.string().required("required"),
-  email: yup.string().email("invalid email").required("required"),
-  contact: yup
-    .string()
-    .matches(phoneRegExp, "Phone number is not valid")
-    .required("required"),
-  address1: yup.string().required("required"),
-  address2: yup.string().required("required"),
-});
-const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  contact: "",
-  address1: "",
-  address2: "",
-};
+const checkoutSchema = yup.object().shape({});
 
 export default Form;
